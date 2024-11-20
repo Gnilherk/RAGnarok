@@ -128,3 +128,16 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# ignore DB files
+volumes/
+volumes/milvus
+db/
+
+# temporarily ignore the following directories
+__api/
+__testing/
+cli/
+client/
+server/

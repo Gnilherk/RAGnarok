@@ -1,0 +1,44 @@
+{
+  "name": "@RAGnarok/pipeline",
+  "version": "0.0.1",
+  "tasks": {
+    "db:start": "bash ../scripts/standalone_embed.sh start",
+    "db:stop": "bash ../scripts/standalone_embed.sh stop",
+    "client:init": "docker run -d --name attu-standalone -p 8000:3000 -e MILVUS_URL=host.docker.internal:19530 zilliz/attu:v2.4 1> /dev/null",
+    "client:start": "docker start attu-standalone 1> /dev/null",
+    "client:stop": "docker stop attu-standalone 1> /dev/null",
+    "start": "deno run db:start && deno run client:start",
+    "stop": "deno run client:stop && deno run db:stop",
+    "deprecated:fasttext:seed": "deno run --env-file -A ./api/__fasttext/run.ts seed",
+    "deprecated:fasttext:query": "deno run --env-file -A ./api/__fasttext/run.ts query",
+    "seed": "deno run --env-file -A ./cli/main.ts -o seed -f ./api/store/seed.json",
+    "reset": "deno run --env-file -A ./cli/main.ts -o reset",
+    "query": "deno run --env-file -A ./cli/main.ts -o query -p",
+    "dev": "deno run --env-file --watch -A ./cli/main.ts",
+    "serve": "deno run --env-file --allow-net --allow-read --allow-env ./server/main.ts"
+  },
+  "workspace": [],
+  "exports": {},
+  "imports": {
+    "@/types": "./src/core/types.ts",
+    "@/ingestion": "./src/ingestion/index.ts",
+    "@/storage": "./src/storage/index.ts",
+    "@/embedding": "./src/embedding/index.ts",
+    "@/retrieval": "./src/retrieval/index.ts",
+
+    "@llamaindex/core": "jsr:@llamaindex/core@^0.3.17",
+    "@qdrant/js-client-grpc": "npm:@qdrant/js-client-grpc@^1.12.0",
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/cli": "jsr:@std/cli@^1.0.6",
+    "@std/collections": "jsr:@std/collections@^1.0.9",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "@std/fs": "jsr:@std/fs@^1.0.5",
+    "@std/http": "jsr:@std/http@^1.0.9",
+    "@std/io": "jsr:@std/io@^0.225.0",
+    "@std/json": "jsr:@std/json@^1.0.1",
+    "@zilliz/milvus2-sdk-node": "npm:@zilliz/milvus2-sdk-node@^2.4.9",
+    "chromadb": "npm:chromadb@^1.9.3",
+    "ollama": "npm:ollama@^0.5.9"
+  },
+  "nodeModulesDir": "auto"
+}
